@@ -1,26 +1,54 @@
 ---
-title       : 
-subtitle    : 
-author      : 
-job         : 
+title       : Fun with Slidify
+subtitle    : R and slidify, the dynamic duo
+author      : Pierre - 2018-10-28
+job         : 2018-10-28
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : tomorrow      # 
-widgets     : []            # {mathjax, quiz, bootstrap}
+widgets     : [bootstrap]            # {mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 knit        : slidify::knit2slides
+output: ioslides_presentation
 ---
 
-## Read-And-Delete
+## Data
 
-1. Edit YAML front matter
-2. Write using R Markdown
-3. Use an empty line followed by three dashes to separate slides!
+In this short presentation we look at the seasonality of outbreaks of the Hand, Foot Mouth Disease in Singapore.
 
---- .class #id 
+It is a disease that impacts many children every year.
 
-## Slide 2
+The `data.gov.sg` initiative makes data available (
+https://data.gov.sg/dataset/weekly-infectious-disease-bulletin-cases)
 
+```{r d}
+data <- read.csv("weekly-infectious-disease-bulletin-cases.csv")
+library(dplyr)
+library(tidyr)
+hfmd <- data  %>%
+        filter(disease == 'Hand, Foot Mouth Disease') %>%
+        select(epi_week, no._of_cases) %>%
+        separate(epi_week, c('year','week'), sep='-')
+```
 
+## Graph
 
+```{r, echo=FALSE}
+library(plotly)
+suppressPackageStartupMessages({library(plotly)}) 
+pl <- plot_ly(data=hfmd, x = ~week, y = ~no._of_cases, color=~year, type = 'scatter', mode='lines') %>%
+      layout(xaxis=list(title='Weeks'), yaxis=list(title='Number of cases'), title='HFMD Outbreaks over the years')
+pl
+```
 
+## Notes
+
+- Getting `slidify` to play nice with `plot_ly` wasn't straightforward
+- The trick was to set `output: ioslides_presentation` in the header
+- And then call `rmarkdown::render("index.Rmd")`
+
+## Thanks
+
+<center>
+That's all!
+</center>
