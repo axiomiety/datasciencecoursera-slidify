@@ -1,0 +1,24 @@
+---
+title: "Fun with Leaflet"
+author: "Pierre"
+date: "11/8/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Fun with Leaflet
+
+This map is using the `leaflet.extras` library to cluster taxi availability in Singapore around the 1st of January 2018, at 06:00. This provides the `addGeoJSONv2` method which enables us to use GeoJSON objects and clustering together.
+
+```{r leaflet}
+url <- 'https://api.data.gov.sg/v1/transport/taxi-availability?date_time=2018-01-01T06%3A00%3A00'
+library(rjson)
+library(leaflet)
+library(leaflet.extras)
+d <- fromJSON(file=url)
+leaflet() %>% setView(lng=103.8, lat=1.3667, zoom=10) %>% addTiles() %>% addGeoJSONv2(d, clusterOptions=markerClusterOptions())
+
+```
