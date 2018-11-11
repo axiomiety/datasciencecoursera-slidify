@@ -1,0 +1,65 @@
+---
+title       : Building a Data Product
+subtitle    : With Shiny
+author      : Pierre
+job         : 2018-11-11
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [bootstrap]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+output      : ioslides_presentation
+---
+
+## K-Means clustering
+
+When looking at uncategorised data, it can be useful to group similar observations together
+
+ - K-Means clustering allows us to do just that
+ - But finding the 'right' number of clusters can be a little tricky
+
+This Shiny app enables the user to select a range of clusters, e.g. between 2 and 5, and run K-Means for each sample size (`2,3,4,5` in that case). The outputs will provide guidance as to the optimal number of clusters
+
+## The app (1)
+
+The output will be 2 graphs - one to visualise the clustering when plotting petal length vs petal width:
+
+```{r kmeans, echo=FALSE}
+suppressPackageStartupMessages({library(ggplot2)})
+library(ggplot2)
+library(grid)
+library(gridExtra)
+data(iris)
+vals <- lapply(seq(2,5), function(k) {kmeans(iris[,3:4], k)})
+plots <- lapply(vals, function(km) {
+      km$cluster <- as.factor(km$cluster)
+      num_clusters <- length(levels(km$cluster))
+      ggplot(iris, aes(Petal.Length, Petal.Width, color = km$cluster)) + 
+        geom_point() + ggtitle(paste(num_clusters,"cluster(s)", sep=" ")) +
+        theme(legend.title=element_blank()) # remove the legend
+    })
+grid.arrange(grobs=plots, ncol=2)
+```
+
+## The app (2)
+
+And another showing the total sum of squares within for each value of `k`:
+
+```{r wss, echo=FALSE}
+wss <- lapply(vals, function(km) {km$tot.withinss})
+df <- data.frame(k=as.numeric(seq(2,5)),wss=as.numeric(wss))
+ggplot(df, aes(x=k, y=wss)) + geom_line() + labs(x="Number of clusters", y="Within sum of squares", title="Sum of Squares within by number of clusters")
+```
+
+We will be using the `iris` dataset as an example (which happens to be categorised, so we know what the correct number of clusters should be)
+
+## Final thoughts
+
+- The `iris` dataset is actually categorised (there are 3 species)
+- Due to the size of the dataset, it is relatively fast to run k-means
+- The hardest part was figuring out how to dynamically add multiple plots to a single output
+
+<center>
+Thanks for watching!
+</center>
