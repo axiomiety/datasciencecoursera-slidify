@@ -1,7 +1,7 @@
 ---
 title: "Fun with Leaflet"
 author: "Pierre"
-date: "11/8/2018"
+date: "7th Nov 2018"
 output: html_document
 ---
 
@@ -15,9 +15,9 @@ This map is using the `leaflet.extras` library to cluster taxi availability in S
 
 ```{r leaflet}
 url <- 'https://api.data.gov.sg/v1/transport/taxi-availability?date_time=2018-01-01T06%3A00%3A00'
-library(rjson)
-library(leaflet)
-library(leaflet.extras)
+suppressWarnings({library(leaflet)
+  library(rjson)
+  library(leaflet.extras)})
 d <- fromJSON(file=url)
 leaflet() %>% setView(lng=103.8, lat=1.3667, zoom=10) %>% addTiles() %>% addGeoJSONv2(d, clusterOptions=markerClusterOptions())
 
