@@ -1,7 +1,7 @@
 ---
 title       : Building a Data Product
 subtitle    : With Shiny
-author      : Pierre
+author      : Pierre - 2018-11-11
 job         : 2018-11-11
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
