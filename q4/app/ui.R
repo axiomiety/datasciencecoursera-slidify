@@ -9,13 +9,11 @@
 
 library(shiny)
 
-# Define UI for application that draws a histogram
 shinyUI(fluidPage(
   
     # Application title
     titlePanel("K-means clustering on the Iris dataset"),
-    
-    # Sidebar with a slider input for number of bins 
+  
     sidebarLayout(
         sidebarPanel(
             helpText("This application allows you to visualise how kmeans clusters observations based on the number of clusters. Use the slider below to visualise how observations are grouped depending on the number of clusters"),
@@ -30,7 +28,6 @@ shinyUI(fluidPage(
             submitButton(text='Apply')
         ),
         
-        # Show a plot of the generated distribution
         mainPanel(
             plotOutput("clusterPlots"),
             plotOutput("tssByNumCluster")

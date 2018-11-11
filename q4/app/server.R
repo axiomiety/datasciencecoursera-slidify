@@ -12,7 +12,7 @@ library(gridExtra)
 library(grid)
 library(ggplot2)
 data(iris)
-# Define server logic required to draw a histogram
+
 shinyServer(function(input, output) {
   
   getRange <- reactive({
